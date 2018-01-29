@@ -4,7 +4,18 @@ module.exports = function(app) {
     app.all('*', (req, res, next) => {
         next()
     })
-    app.route('/api/user/:id')
+
+    app.route('/book')
+        .all((req, res, next) => {
+            auth(req, res, next)
+        })
+        .post((req, res, next) => {
+            res.json({
+                message: `${req.body}`
+            })
+        })
+
+    app.route('/user/:id')
         .all((req, res, next) => {
             auth(req, res, next)
         })
