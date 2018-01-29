@@ -11,7 +11,7 @@ module.exports = function(app) {
         })
         .post((req, res, next) => {
             res.json({
-                message: `${req.body}`
+                message: `Your book title is ${req.body.title}`
             })
         })
 
