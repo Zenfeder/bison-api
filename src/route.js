@@ -5,6 +5,16 @@ module.exports = function(app) {
         next()
     })
 
+    app.route('/greet')
+        .all((req, res, next) => {
+            auth(req, res, next)
+        })
+        .get((req, res, next) => {
+            res.json({
+                message: 'Hello docker'
+            })
+        })
+
     app.route('/user/:id')
         .all((req, res, next) => {
             auth(req, res, next)
@@ -25,5 +35,4 @@ module.exports = function(app) {
                 message: `delete user by id: ${req.params.id}`
             })
         })
-        
 }
