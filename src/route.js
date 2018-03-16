@@ -25,4 +25,5 @@ module.exports = function(app) {
                 message: `delete user by id: ${req.params.id}`
             })
         })
+        
 }
