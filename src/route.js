@@ -5,16 +5,6 @@ module.exports = function(app) {
         next()
     })
 
-    app.route('/book')
-        .all((req, res, next) => {
-            auth(req, res, next)
-        })
-        .post((req, res, next) => {
-            res.json({
-                message: `Your book is ${req.body.title}`
-            })
-        })
-
     app.route('/user/:id')
         .all((req, res, next) => {
             auth(req, res, next)
