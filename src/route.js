@@ -5,7 +5,7 @@ module.exports = function(app) {
         next()
     })
 
-    app.route('/greet')
+    app.route('/hello')
         .all((req, res, next) => {
             auth(req, res, next)
         })
