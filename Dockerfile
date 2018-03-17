@@ -11,4 +11,4 @@ COPY . .
 
 EXPOSE 8081
 
-CMD ["pm2", "start", "index.js", "--name", "bison-api"]
+CMD ["npm", "start"]
