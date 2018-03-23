@@ -11,7 +11,7 @@ module.exports = function(app) {
         })
         .get((req, res, next) => {
             res.json({
-                message: 'Docker auto test'
+                message: 'Docker auto test...'
             })
         })
 
