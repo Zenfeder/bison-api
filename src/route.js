@@ -11,7 +11,7 @@ module.exports = function(app) {
         })
         .get((req, res, next) => {
             res.json({
-                message: '>>> Hello, LinXiaobao'
+                message: '>>> Hello, LinXiaobao...'
             })
         })
 
