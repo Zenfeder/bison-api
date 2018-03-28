@@ -1,5 +1,5 @@
 {
-  "name": "bison-api",
+  "name": "ha-kafer-api",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -8,14 +8,14 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/Zenfeder/bison-api.git"
+    "url": "git+https://github.com/Zenfeder/ha-kafer-api.git"
   },
   "author": "陈果",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/Zenfeder/bison-api/issues"
+    "url": "https://github.com/Zenfeder/ha-kafer-api/issues"
   },
-  "homepage": "https://github.com/Zenfeder/bison-api#readme",
+  "homepage": "https://github.com/Zenfeder/ha-kafer-api#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "express": "^4.16.2",
