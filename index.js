@@ -1,15 +1,28 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
+// Alias module path
+const moduleAlias = require('module-alias')
 
-const route = require('./src/route');
+moduleAlias.addAliases({
+    '@root'  : __dirname,
+    "@route": __dirname + "/src/route",
+    "@controller": __dirname + "/src/controller",
+    "@model": __dirname + "/src/model",
+    "@utils": __dirname + "/src/utils"
+})
 
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
+moduleAlias()
+ 
+const express = require('express')
+const app = express()
+const bodyParser = require('body-parser')
 
-const port = process.env.PORT || 8081;
+const route = require('@route/entry.js')
 
-route(app);
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
 
-app.listen(port);
-console.log(`服务已启动，端口： ${port}`);
+const port = process.env.PORT || 8081
+
+route(app)
+
+app.listen(port)
+console.log(`服务已启动，端口： ${port}`)
