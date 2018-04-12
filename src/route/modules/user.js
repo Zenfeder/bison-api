@@ -1,23 +1,27 @@
 const express = require('express')
 const router = express.Router()
-
 const User = require('@controller/user.js')
 
+let token = null
+
 router.use((req, res, next) => {
-  next()
+    token = req.headers.authorization
+
+    next()
 })
 
 router.route('/')
 .all((req, res, next) => {
-    if (!req.headers.authorization) {
-        res.status(401).send({ message: '未登录' })
+    if (!token) {
+        res.status(401).send({ message: '请登录' })
         return
     }
+    
     next()
 })
 // 获取个人信息
 .get((req, res, next) => {
-    (new User()).getProfile(req.headers.authorization).then(data => {
+    (new User()).profile({ token }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -62,11 +66,6 @@ router.post('/login', (req, res) => {
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
-})
-
-// 退出登录
-router.post('/logout', (req, res) => {
-    
 })
 
 // 找回密码-发送邮件

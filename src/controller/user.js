@@ -74,6 +74,7 @@ class User extends Auth {
                 user.name = name
                 user.email = email
                 user.password = bcrypt.hashSync(password, 8)
+                user.created_at = Date.now()
 
                 user.save((err, doc) => {
                     if (err) 
@@ -108,11 +109,11 @@ class User extends Auth {
         })
     }
 
-    async getProfile(token) {
-        let decoded = await this.jwtVerify(token)
+    async profile({ token }) {
+        let { user_id } = await this.jwtVerify(token)
 
         return new Promise((resolve, reject) => {
-            UserModel.findById(decoded.user_id, (err, doc) => {
+            UserModel.findById(user_id, (err, doc) => {
                 if (err) 
                     return reject({ code: 500, message: '用户查找失败' })
                 if (!doc) 

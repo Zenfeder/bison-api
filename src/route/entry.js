@@ -9,6 +9,5 @@ module.exports = function(app) {
 
     app.use('/user', require('@route/modules/user.js'))
     app.use('/joke', require('@route/modules/joke.js'))
-    app.use('/comment', require('@route/modules/comment.js'))
     app.use('/search', require('@route/modules/search.js'))
 }
