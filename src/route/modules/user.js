@@ -2,10 +2,12 @@ const express = require('express')
 const router = express.Router()
 const User = require('@controller/user.js')
 
-let token = null
+let token = ''
+let user = null
 
 router.use((req, res, next) => {
     token = req.headers.authorization
+    user = new User()
 
     next()
 })
@@ -21,7 +23,7 @@ router.route('/')
 })
 // 获取个人信息
 .get((req, res, next) => {
-    (new User()).profile({ token }).then(data => {
+    user.profile({ token }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -32,12 +34,24 @@ router.route('/')
     
 })
 
-// 注册-发送验证码
-router.post('/register_vcode', (req, res) => {
-    (new User()).registerVcode({ 
-        email: req.body.email 
+router.route('/register_vcode')
+// 注册-获取验证码
+.get((req, res, next) => {
+    user.registerVcodeSend({ 
+        email: req.query.email
     }).then(data => {
-        res.status(200).send({ data: null })
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
+})
+// 注册-认证验证码
+.post((req, res, next) => {
+    user.registerVcodeVerify({ 
+        email: req.body.email,
+        vcode: req.body.vcode
+    }).then(data => {
+        res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -45,7 +59,7 @@ router.post('/register_vcode', (req, res) => {
 
 // 注册-提交注册信息
 router.post('/register', (req, res) => {
-    (new User()).register({
+    user.register({
         name: req.body.name, 
         email: req.body.email, 
         password: req.body.password
@@ -58,7 +72,7 @@ router.post('/register', (req, res) => {
 
 // 登录
 router.post('/login', (req, res) => {
-    (new User()).login({
+    user.login({
         nameOrEmail: req.body.nameOrEmail, 
         password: req.body.password
     }).then(data => {

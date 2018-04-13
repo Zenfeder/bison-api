@@ -4,6 +4,7 @@ const userSchema = mongoose.Schema({
     name: String,
     email: String,
     vcode: Number,
+    verified: Boolean,
     password: String,
     gender: { type: Number, default: 0 }, // 0: 不详, 1: 男, 2: 女
     avator: {

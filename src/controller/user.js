@@ -15,7 +15,7 @@ class User extends Auth {
         super()
     }
 
-    registerVcode({ email }) {
+    registerVcodeSend({ email }) {
         return new Promise((resolve, reject) => {
             UserModel.findOne({ email }, (err, doc) => {
                 if (err) 
@@ -56,6 +56,33 @@ class User extends Auth {
         })
     }
 
+    registerVcodeVerify ({ email, vcode }) {
+        return new Promise((resolve, reject) => {
+            if (!validateEmail(email))
+                return reject({ code: 403, message: '邮箱格式错误' })
+            if (!vcode)
+                return reject({ code: 403, message: '验证码不能为空' })
+
+            UserModel.findOne({ email }, (err, user) => {
+                if (err) 
+                    return reject({ code: 500, message: '验证码认证失败' })
+                if (!user) 
+                    return reject({ code: 403, message: '请先获取验证码' })
+                if (user.vcode !== (vcode - 0))
+                    return reject({ code: 403, message: '验证码不正确' })
+
+                user.verified = true
+
+                user.save((err, doc) => {
+                    if (err) 
+                        return reject({ code: 500, message: '验证码认证失败' })
+
+                    resolve()
+                })
+            })
+        })
+    }
+
     register({ name, email, password }) {
         return new Promise((resolve, reject) => {
             if (!name || !email || !password)
@@ -69,7 +96,9 @@ class User extends Auth {
                 if (err) 
                     return reject({ code: 500, message: '用户注册失败' })
                 if (!user) 
-                    return reject({ code: 403, message: '请先发送验证码' })
+                    return reject({ code: 403, message: '请先获取验证码' })
+                if (!user.verified)
+                    return reject({ code: 403, message: '请先校验验证码' })
 
                 user.name = name
                 user.email = email
