@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const User = require('@controller/user.js')
+const { USER_JOKES_TYPES } = require('@utils/constDef.js')
 
 let token = ''
 let user = null
@@ -90,6 +91,27 @@ router.post('/pwd_email', (req, res) => {
 // 重置密码
 router.post('/pwd_update', (req, res) => {
     
+})
+
+// 分页获取用户相关段子（写过、顶过）列表
+router.get('/jokes', (req, res) => {
+    let type = req.query.type
+    let offset = req.query.offset - 0
+    let size = req.query.size - 0
+
+    if (!token) {
+        res.status(401).send({ message: '请登录' })
+        return
+    }
+    if (!Object.keys(USER_JOKES_TYPES).includes(type)) {
+        res.status(403).send({ message: '请指定具体列表类型' })
+        return
+    }
+    user.jokes({ token, type, offset, size }).then(data => {
+        res.status(200).send({ data })
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 module.exports = router

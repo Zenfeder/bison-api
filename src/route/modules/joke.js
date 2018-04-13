@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const Joke = require('@controller/joke.js')
-const constDef = require('@utils/constDef.js')
+const { JOKE_VOTE_TYPES } = require('@utils/constDef.js')
 
 let token = ''
 let joke = null
@@ -20,7 +20,7 @@ router.route('/')
 })
 // 发布段子
 .post((req, res, next) => {
-    let content = req.body.content.trim()
+    let content = req.body.content
 
     if (!token) {
         res.status(401).send({ message: '请登录' })
@@ -58,7 +58,7 @@ router.route('/:joke_id')
         res.status(401).send({ message: '请登录' })
         return
     }
-    if (!Object.keys(constDef.JOKE_VOTE_TYPES).includes(type)) {
+    if (!Object.keys(JOKE_VOTE_TYPES).includes(type)) {
         res.status(403).send({ message: '请说明操作类型' })
         return
     }

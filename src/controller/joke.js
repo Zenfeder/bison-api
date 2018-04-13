@@ -11,15 +11,15 @@ class Joke extends Auth {
         return new Promise((resolve, reject) => {
             JokeModel.findById(joke_id, (err, joke) => {
                 if (err) 
-                    return reject({ code: 500, message: '段子详情获取失败' })
+                    return reject({ code: 500, message: '数据查找失败' })
                 if (!joke) 
                     return reject({ code: 404, message: '段子不存在' })
 
                 UserModel.findById(joke.user_id, (err, user) => {
                     if (err) 
-                        return reject({ code: 500, message: '段子详情获取失败' })
+                        return reject({ code: 500, message: '数据查找失败' })
                     if (!user) 
-                        return reject({ code: 500, message: '段子详情获取失败' })
+                        return reject({ code: 500, message: '数据查找失败' })
 
                     resolve({
                         id: joke._id,
