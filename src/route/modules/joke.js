@@ -1,11 +1,14 @@
 const express = require('express')
 const router = express.Router()
 const Joke = require('@controller/joke.js')
+const constDef = require('@utils/constDef.js')
 
-let token = null
+let token = ''
+let joke = null
 
 router.use((req, res, next) => {
     token = req.headers.authorization
+    joke = new Joke()
 
     next()
 })
@@ -28,8 +31,8 @@ router.route('/')
         return
     }
 
-    (new Joke()).publish({ token, content }).then(data => {
-        res.status(200).send({ data: null })
+    joke.publish({ token, content }).then(data => {
+        res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -38,7 +41,9 @@ router.route('/')
 router.route('/:joke_id')
 // 获取段子详情
 .get((req, res, next) => {
-    (new Joke()).detail({ joke_id: req.params.joke_id }).then(data => {
+    let joke_id = req.params.joke_id
+
+    joke.detail({ joke_id }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -46,20 +51,20 @@ router.route('/:joke_id')
 })
 // 顶／踩段子
 .put((req, res, next) => {
+    let joke_id = req.params.joke_id
     let type = req.body.type.trim()
 
     if (!token) {
         res.status(401).send({ message: '请登录' })
         return
     }
-
-    if (!content) {
-        res.status(403).send({ message: '内容不能为空' })
+    if (!Object.keys(constDef.JOKE_VOTE_TYPES).includes(type)) {
+        res.status(403).send({ message: '请说明操作类型' })
         return
     }
 
-    (new Joke()).publish({ token, content }).then(data => {
-        res.status(200).send({ data: null })
+    joke.vote({ token, joke_id, type }).then(data => {
+        res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
