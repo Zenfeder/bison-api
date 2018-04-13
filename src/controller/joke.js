@@ -125,6 +125,42 @@ class Joke extends Auth {
             })
         })
     }
+
+    async remove ({ token, joke_id }) {
+        let { user_id } = await this.jwtVerify(token)
+
+        return new Promise((resolve, reject) => {
+            JokeModel.findById(joke_id, (err, joke) => {
+                if (err) 
+                    return reject({ code: 500, message: '删除失败' })
+                if (!joke) 
+                    return reject({ code: 404, message: '段子不存在' })
+                if (joke.user_id !== user_id)
+                    return reject({ code: 403, message: '无删除权限'  })
+                JokeModel.remove({ _id: joke_id }, err => {
+                    if (err) 
+                        return reject({ code: 500, message: '删除失败' })
+
+                    UserModel.findById(user_id, (err, user) => {
+                        if (err) 
+                            return reject({ code: 500, message: '删除失败' })
+                        if (!user)
+                            return reject({ code: 404, message: '用户不存在' })
+
+                        let jokeIdIndex = user.write_joke_ids.findIndex(id => id === joke_id)
+                        user.write_joke_ids.splice(jokeIdIndex, 1)
+
+                        user.save((err, doc) => {
+                            if (err)
+                                return reject({ code: 500, message: '删除失败' })
+
+                            resolve()
+                        })
+                    })
+                })
+            })
+        })
+    }
 }
 
 module.exports = Joke

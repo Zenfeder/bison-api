@@ -71,17 +71,13 @@ router.route('/:joke_id')
 })
 // 删除段子
 .delete((req, res, next) => {
-
-})
-
-// 分页获取用户顶过的段子列表
-router.get('/like', (req, res) => {
-
-})
-
-// 分页获取用户写过的段子列表
-router.get('/write', (req, res) => {
-
+    let joke_id = req.params.joke_id
+    
+    joke.remove({ token, joke_id }).then(data => {
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 router.route('/:joke_id/comment')
