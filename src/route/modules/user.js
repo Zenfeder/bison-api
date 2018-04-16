@@ -96,13 +96,14 @@ router.post('/pwd_update', (req, res) => {
 // 分页获取用户相关段子（写过、顶过）列表
 router.get('/jokes', (req, res) => {
     let type = req.query.type
-    let offset = req.query.offset - 0
-    let size = req.query.size - 0
+    let offset = req.query.offset===undefined?0:(Number.isInteger(req.query.offset-0)?req.query.offset-0:0)
+    let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
     if (!Object.keys(USER_JOKES_TYPES).includes(type)) {
         res.status(403).send({ message: '请指定具体列表类型' })
         return
     }
+
     user.jokes({ token, type, offset, size }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {

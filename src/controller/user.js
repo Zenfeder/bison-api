@@ -159,7 +159,7 @@ class User extends Auth {
         })
     }
 
-    async jokes({ token, type, offset = 0, size = 10 }) {
+    async jokes({ token, type, offset, size }) {
         let { user_id } = await this.jwtVerify(token)
 
         return new Promise((resolve, reject) => {
@@ -173,7 +173,10 @@ class User extends Auth {
                     '_id': {
                         $in: user[USER_JOKES_TYPES[type]]
                     }
-                }, (err, jokes) => {
+                })
+                .skip(offset)
+                .limit(size)
+                .exec((err, jokes) => {
                     if (err)
                         return reject({ code: 500, message: '数据查找失败' })
 
