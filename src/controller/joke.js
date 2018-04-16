@@ -23,6 +23,8 @@ class Joke extends Auth {
                         id: elem._id,
                         content: elem.content,
                         user_id: elem.user_id,
+                        user_name: elem.user_name,
+                        user_avator: elem.user_avator,
                         like_num: elem.like_user_ids.length,
                         dislike_num: elem.dislike_user_ids.length,
                         comment_num: elem.comment_ids.length,
@@ -69,17 +71,22 @@ class Joke extends Auth {
         let { user_id } = await this.jwtVerify(token)
 
         return new Promise((resolve, reject) => {
-            let joke = new JokeModel({ user_id, content })
-
-            joke.save((err, doc) => {
-                if (err) 
+            UserModel.findById(user_id, (err, user) => {
+                if (err)
                     return reject({ code: 500, message: '段子发布失败' })
+                if (!user)
+                    return reject({ code: 404, message: '用户不存在' })
 
-                UserModel.findById(user_id, (err, user) => {
+                let joke = new JokeModel({ 
+                    content,
+                    user_id: user._id,
+                    user_name: user.name,
+                    user_avator: user.avator
+                })
+
+                joke.save((err, doc) => {
                     if (err) 
                         return reject({ code: 500, message: '段子发布失败' })
-                    if (!user) 
-                        return reject({ code: 404, message: '用户不存在' })
 
                     user.write_joke_ids.push(doc._id)
                     user.save((err, doc) => {
