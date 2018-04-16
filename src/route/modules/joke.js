@@ -17,9 +17,16 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-// 获取首页段子列表（分页）
+// 分页获取首页段子列表
 .get((req, res, next) => {
+    let offset = req.query.offset===undefined?0:(Number.isInteger(req.query.offset-0)?req.query.offset-0:0)
+    let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
+    joke.list({ offset, size }).then(data => {
+        res.status(200).send({ data })
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 // 发布段子
 .post((req, res, next) => {
