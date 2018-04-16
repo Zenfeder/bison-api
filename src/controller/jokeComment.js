@@ -8,7 +8,7 @@ class JokeComment extends Auth {
         super()
     }
 
-    list({ joke_id, offset = 0, size = 10 }) {
+    list({ joke_id, offset, size }) {
         return new Promise((resolve, reject) => {
             JokeModel.findById(joke_id, (err, joke) => {
                 if (err) 
@@ -20,7 +20,10 @@ class JokeComment extends Auth {
                     '_id': {
                         $in: joke.comment_ids
                     }
-                }, (err, docs) => {
+                })
+                .skip(offset)
+                .limit(size)
+                .exec((err, docs) => {
                     if (err) 
                         return reject({ code: 500, message: '数据查找失败' })
 

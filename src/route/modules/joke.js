@@ -76,11 +76,11 @@ router.route('/:joke_id')
 })
 
 router.route('/:joke_id/comment')
-// 获取段子评论列表
+// 分页获取段子评论列表
 .get((req, res, next) => {
     let joke_id = req.params.joke_id
-    let offset = req.query.offset - 0
-    let size = req.query.size - 0
+    let offset = req.query.offset===undefined?0:(Number.isInteger(req.query.offset-0)?req.query.offset-0:0)
+    let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
     jokeComment.list({ joke_id, offset, size }).then(data => {
         res.status(200).send({ data })
