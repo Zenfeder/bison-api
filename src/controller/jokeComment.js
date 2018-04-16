@@ -20,9 +20,23 @@ class JokeComment extends Auth {
                     '_id': {
                         $in: joke.comment_ids
                     }
-                }, (err, comments) => {
+                }, (err, docs) => {
                     if (err) 
                         return reject({ code: 500, message: '数据查找失败' })
+
+                    let comments = []
+
+                    docs.forEach(elem => {
+                        comments.push({
+                            id: elem._id,
+                            joke_id: elem.joke_id,
+                            content: elem.content,
+                            user_id: elem.user_id,
+                            user_name: elem.user_name,
+                            user_avator: elem.user_avator,
+                            created_at: elem.created_at
+                        })
+                    })
 
                     resolve(comments)
                 })

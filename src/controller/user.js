@@ -159,7 +159,7 @@ class User extends Auth {
         })
     }
 
-    async jokes({ token, type, offset, size }) {
+    async jokes({ token, type, offset = 0, size = 10 }) {
         let { user_id } = await this.jwtVerify(token)
 
         return new Promise((resolve, reject) => {
