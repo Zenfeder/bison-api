@@ -154,7 +154,12 @@ class User extends Auth {
                 if (!doc) 
                     return reject({ code: 404, message: '用户不存在' })
 
-                resolve({ id: doc._id, name: doc.name, email: doc.email })
+                resolve({ 
+                    name: doc.name, 
+                    avator: doc.avator,
+                    email: doc.email,
+                    gender: doc.gender
+                })
             })
         })
     }
