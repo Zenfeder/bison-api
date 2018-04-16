@@ -99,10 +99,6 @@ router.get('/jokes', (req, res) => {
     let offset = req.query.offset - 0
     let size = req.query.size - 0
 
-    if (!token) {
-        res.status(401).send({ message: '请登录' })
-        return
-    }
     if (!Object.keys(USER_JOKES_TYPES).includes(type)) {
         res.status(403).send({ message: '请指定具体列表类型' })
         return

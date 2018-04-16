@@ -25,10 +25,6 @@ router.route('/')
 .post((req, res, next) => {
     let content = req.body.content
 
-    if (!token) {
-        res.status(401).send({ message: '请登录' })
-        return
-    }
     if (!content) {
         res.status(403).send({ message: '内容不能为空' })
         return
@@ -57,10 +53,6 @@ router.route('/:joke_id')
     let joke_id = req.params.joke_id
     let type = req.body.type.trim()
 
-    if (!token) {
-        res.status(401).send({ message: '请登录' })
-        return
-    }
     if (!Object.keys(JOKE_VOTE_TYPES).includes(type)) {
         res.status(403).send({ message: '请说明操作类型' })
         return
@@ -100,6 +92,11 @@ router.route('/:joke_id/comment')
 .post((req, res, next) => {
     let joke_id = req.params.joke_id
     let content = req.body.content
+
+    if (!content) {
+        res.status(403).send({ message: '评论内容不能为空' })
+        return
+    }
 
     jokeComment.publish({ token, joke_id, content }).then(data => {
         res.status(204).end()
