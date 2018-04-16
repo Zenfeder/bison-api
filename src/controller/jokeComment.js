@@ -1,4 +1,5 @@
 const Auth = require('@controller/auth.js')
+const UserModel = require('@model/user.js')
 const JokeModel = require('@model/joke.js')
 const JokeCommentModel = require('@model/jokeComment.js')
 
@@ -8,33 +9,64 @@ class JokeComment extends Auth {
     }
 
     list({ joke_id, offset = 0, size = 10 }) {
+        return new Promise((resolve, reject) => {
+            JokeModel.findById(joke_id, (err, joke) => {
+                if (err) 
+                    return reject({ code: 500, message: '数据查找失败' })
+                if (!joke)
+                    return reject({ code: 404, message: '段子不存在' })
 
+                JokeCommentModel.find({
+                    '_id': {
+                        $in: joke.comment_ids
+                    }
+                }, (err, comments) => {
+                    if (err) 
+                        return reject({ code: 500, message: '数据查找失败' })
+
+                    resolve(comments)
+                })
+            })
+        })
     }
 
     async publish({ token, joke_id, content }) {
         let { user_id } = await this.jwtVerify(token)
 
         return new Promise((resolve, reject) => {
-            let jokeComment = new JokeCommentModel({ user_id, joke_id, content })
-
-            jokeComment.save((err, doc) => {
-                if (err) 
+            UserModel.findById(user_id, (err, user) => {
+                if (err)
                     return reject({ code: 500, message: '评论发布失败' })
+                if (!user)
+                    return reject({ code: 404, message: '用户不存在' })
 
-                JokeModel.findById(joke_id, (err, joke) => {
+                let jokeComment = new JokeCommentModel({ 
+                    joke_id, 
+                    content,
+                    user_id,
+                    user_name: user.name,
+                    user_avator: user.avator,
+                })
+
+                jokeComment.save((err, doc) => {
                     if (err) 
                         return reject({ code: 500, message: '评论发布失败' })
-                    if (!joke) 
-                        return reject({ code: 404, message: '段子不存在' })
 
-                    joke.comment_ids.push(doc._id)
-
-                    joke.save(err => {
+                    JokeModel.findById(joke_id, (err, joke) => {
                         if (err) 
                             return reject({ code: 500, message: '评论发布失败' })
-                        resolve()
-                    })
-                })  
+                        if (!joke) 
+                            return reject({ code: 404, message: '段子不存在' })
+
+                        joke.comment_ids.push(doc._id)
+
+                        joke.save(err => {
+                            if (err) 
+                                return reject({ code: 500, message: '评论发布失败' })
+                            resolve()
+                        })
+                    })  
+                })
             })
         })
     }

@@ -1,9 +1,11 @@
 const mongoose = require('@model/db.js')
 
 const JokeCommentSchema = mongoose.Schema({
-    user_id: String,
     joke_id: String,
     content: String,
+    user_id: String,
+    user_name: String,
+    user_avator: String,
     created_at: { type: String, default: Date.now() }
 })
 
