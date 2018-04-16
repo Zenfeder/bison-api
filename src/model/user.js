@@ -14,7 +14,6 @@ const userSchema = mongoose.Schema({
     write_joke_ids: { type: [String], _id : false },
     like_joke_ids: { type: [String], _id : false },
     dislike_joke_ids: { type: [String], _id : false },
-    joke_comment_ids: { type: [String], _id : false },
     created_at: { type: String, default: Date.now() }
 })
 
