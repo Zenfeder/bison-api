@@ -6,7 +6,21 @@ class Search {
     constructor() {}
 
     hotKeyword () {
-        
+        return new Promise((resolve, reject) => {
+            SearchKeywordModel.find()
+            .sort({ count: -1 })
+            .limit(5)
+            .exec((err, docs) => {
+                if (err) 
+                    return reject({ code: 500, message: '热搜关键字获取失败' })
+
+                let keywords = []
+                docs.forEach(elem => {
+                    keywords.push({ keyword: elem.keyword })
+                })
+                resolve(keywords)
+            })
+        })
     }
 
     countSearchKeyword({ keyword }) {
@@ -66,7 +80,7 @@ class Search {
                 })
 
                 resolve(jokes)
-                
+
                 this.countSearchKeyword({ keyword })
             })
         })
