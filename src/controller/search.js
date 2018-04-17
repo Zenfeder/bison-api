@@ -10,20 +10,10 @@ class Search {
 
     result ({ keyword, offset, size }) {
         let keywordList = nodejieba.cut(keyword)
-        let keywordStr = ''
-        keywordList.forEach((elem, index) => {
-            keywordStr += elem
-
-            if (index < keywordList.length - 1)
-                keywordStr += '|'
-
-            if (index === keywordList.length - 1)
-                keywordStr += '+' 
-        })
 
         return new Promise((resolve, reject) => {
             JokeModel.find({
-                content: new RegExp(keywordStr, 'i')
+                content: new RegExp(keywordList.join('|') + '+', 'i')
             })
             .skip(offset)
             .limit(size)
