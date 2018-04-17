@@ -21,6 +21,11 @@ router.get('/', (req, res) => {
     let offset = req.query.offset===undefined?0:(Number.isInteger(req.query.offset-0)?req.query.offset-0:0)
     let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
+    if (!keyword.trim()) {
+        res.status(403).send({ message: '搜索内容不能为空' })
+        return
+    }
+
     search.result({ keyword, offset, size }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
