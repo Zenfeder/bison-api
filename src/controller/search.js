@@ -79,7 +79,7 @@ class Search {
                     })
                 })
 
-                resolve(jokes)
+                resolve({ keywords: [keyword, ...keywordList], list: jokes })
 
                 this.countSearchKeyword({ keyword })
             })
