@@ -96,6 +96,8 @@ class User extends Auth {
                     return reject({ code: 500, message: '用户注册失败' })
                 if (!user) 
                     return reject({ code: 403, message: '请先获取验证码' })
+                if (user.name)
+                    return reject({ code: 403, message: '该邮箱已被注册' })
                 if (!user.verified)
                     return reject({ code: 403, message: '请先校验验证码' })
 
