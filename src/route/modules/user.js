@@ -32,9 +32,7 @@ router.route('/')
 })
 // 修改个人信息（头像地址、昵称、性别）
 .put((req, res, next) => {
-    let avator = req.body.avator
-    let name = req.body.name
-    let gender = req.body.gender
+    let { avator, name, gender } = req.body
 
     user.updateProfile({ token, avator, name, gender }).then(data => {
         res.status(204).end()
@@ -46,7 +44,8 @@ router.route('/')
 router.route('/register_vcode')
 // 注册-获取验证码
 .get((req, res, next) => {
-    user.registerVcodeSend({ email: req.query.email }).then(data => {
+    let { email } = req.query
+    user.registerVcodeSend({ email }).then(data => {
         res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -54,10 +53,8 @@ router.route('/register_vcode')
 })
 // 注册-认证验证码
 .post((req, res, next) => {
-    user.registerVcodeVerify({ 
-        email: req.body.email,
-        vcode: req.body.vcode
-    }).then(data => {
+    let { email, vcode } = req.body
+    user.registerVcodeVerify({ email, vcode }).then(data => {
         res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -66,11 +63,8 @@ router.route('/register_vcode')
 
 // 注册-提交注册信息
 router.post('/register', (req, res) => {
-    user.register({
-        name: req.body.name, 
-        email: req.body.email, 
-        password: req.body.password
-    }).then(data => {
+    let { name, email, password } = req.body
+    user.register({ name, email, password }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -79,20 +73,22 @@ router.post('/register', (req, res) => {
 
 // 登录
 router.post('/login', (req, res) => {
-    user.login({
-        nameOrEmail: req.body.nameOrEmail, 
-        password: req.body.password
-    }).then(data => {
+    let { nameOrEmail, password } = req.body
+    user.login({ nameOrEmail, password }).then(data => {
         res.status(200).send({ data })
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
 })
 
-
 // 修改密码
 router.post('/pwd_update', (req, res) => {
-    
+    let { oldPwd, newPwd } = req.body
+    user.updatePwd({ token, oldPwd, newPwd }).then(data => {
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 // 找回密码-发送邮件

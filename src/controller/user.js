@@ -238,6 +238,30 @@ class User extends Auth {
             })
         })
     }
+
+    async updatePwd({ token, oldPwd, newPwd }) {
+        let { user_id } = await this.jwtVerify(token)
+
+        return new Promise((resolve, reject) => {
+            UserModel.findById(user_id, (err, user) => {
+                if (err) 
+                    return reject({ code: 500, message: '密码修改失败' })
+                if (!user) 
+                    return reject({ code: 404, message: '用户不存在' })
+                if (!bcrypt.compareSync(oldPwd, user.password))
+                    return reject({ code: 403, message: '旧密码错误' })
+                if (!validatePassword(newPwd))
+                    return reject({ code: 403, message: '密码应为6-12位非空字符' })
+
+                user.password = bcrypt.hashSync(newPwd, 8)
+                user.save(err => {
+                    if (err) 
+                        return reject({ code: 500, message: '密码修改失败' })
+                    resolve()
+                })
+            })
+        })
+    }
 }
 
 module.exports = User
