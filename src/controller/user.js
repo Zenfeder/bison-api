@@ -201,6 +201,43 @@ class User extends Auth {
             })
         })
     }
+
+    async updateProfile({ token, avator, name, gender }) {
+        let { user_id } = await this.jwtVerify(token)
+        
+        return new Promise((resolve, reject) => {
+            UserModel.findById(user_id, (err, doc) => {
+                if (err) 
+                    return reject({ code: 500, message: '修改失败' })
+                if (!doc) 
+                    return reject({ code: 404, message: '用户不存在' })
+
+                if (avator) doc.avator = avator
+                if (gender) doc.gender = gender
+                if (name) {
+                    UserModel.find({ name }, (err, docs) => {
+                        if (err)
+                            return reject({ code: 500, message: '修改失败' })
+                        if (docs.length > 0)
+                            return reject({ code: 403, message: '用户名已被占用' })
+
+                        doc.name = name
+                        doc.save(err => {
+                            if (err)
+                                return reject({ code: 500, message: '修改失败' })
+                            resolve()
+                        })
+                    })
+                } else {
+                    doc.save(err => {
+                        if (err)
+                            return reject({ code: 500, message: '修改失败' })
+                        resolve()
+                    })
+                }
+            })
+        })
+    }
 }
 
 module.exports = User

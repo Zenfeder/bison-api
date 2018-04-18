@@ -32,15 +32,21 @@ router.route('/')
 })
 // 修改个人信息（头像地址、昵称、性别）
 .put((req, res, next) => {
-    
+    let avator = req.body.avator
+    let name = req.body.name
+    let gender = req.body.gender
+
+    user.updateProfile({ token, avator, name, gender }).then(data => {
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 router.route('/register_vcode')
 // 注册-获取验证码
 .get((req, res, next) => {
-    user.registerVcodeSend({ 
-        email: req.query.email
-    }).then(data => {
+    user.registerVcodeSend({ email: req.query.email }).then(data => {
         res.status(204).end()
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
@@ -83,13 +89,19 @@ router.post('/login', (req, res) => {
     })
 })
 
+
+// 修改密码
+router.post('/pwd_update', (req, res) => {
+    
+})
+
 // 找回密码-发送邮件
 router.post('/pwd_email', (req, res) => {
     
 })
 
-// 重置密码
-router.post('/pwd_update', (req, res) => {
+// 找回密码-重置密码
+router.post('/pwd_reset', (req, res) => {
     
 })
 
