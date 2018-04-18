@@ -264,6 +264,52 @@ class User extends Auth {
             })
         })
     }
+
+    resetPwdEmail({ email }) {
+        return new Promise((resolve, reject) => {
+            UserModel.findOne({ email }, (err, user) => {
+                if (err) 
+                    return reject({ code: 500, message: '邮件发送失败' })
+                if (!user) 
+                    return reject({ code: 403, message: '注册尚未注册' })
+
+                let emailer = new Email()
+                let resetPage = 'http://ha.kafer.top/pwd_reset'
+
+                emailer.send({
+                    to: email,
+                    subject: '重置密码',
+                    html: `<div>立即前往重置你的密码：<a>${resetPage}?token=${this.jwtSign({ user_id: user._id })}</a></div>`
+                }).then(info => {
+                    resolve()
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        })
+    }
+
+    async resetPwd({ token, password }) {
+        let { user_id } = await this.jwtVerify(token)
+
+        return new Promise((resolve, reject) => {
+            UserModel.findById(user_id, (err, user) => {
+                if (err) 
+                    return reject({ code: 500, message: '数据查找失败' })
+                if (!user) 
+                    return reject({ code: 404, message: '用户不存在' })
+                if (!validatePassword(password))
+                    return reject({ code: 403, message: '密码应为6-12位非空字符' })
+
+                user.password = bcrypt.hashSync(password, 8)
+                user.save(err => {
+                    if (err)
+                        return reject({ code: 500, message: '重置密码失败' })
+                    resolve()
+                })
+            })
+        })
+    }
 }
 
 module.exports = User

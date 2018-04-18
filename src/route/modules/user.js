@@ -93,12 +93,22 @@ router.post('/pwd_update', (req, res) => {
 
 // 找回密码-发送邮件
 router.post('/pwd_email', (req, res) => {
-    
+    let { email } = req.body
+    user.resetPwdEmail({ email }).then(data => {
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 // 找回密码-重置密码
 router.post('/pwd_reset', (req, res) => {
-    
+    let { password } = req.body
+    user.resetPwd({ token, password }).then(data => {
+        res.status(204).end()
+    }).catch(err => {
+        res.status(err.code).send({ message: err.message })
+    })
 })
 
 // 分页获取用户相关段子（写过、顶过）列表
