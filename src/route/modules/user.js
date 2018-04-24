@@ -25,7 +25,7 @@ router.route('/')
 // 获取个人信息
 .get((req, res, next) => {
     user.profile({ token }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -65,7 +65,7 @@ router.route('/register_vcode')
 router.post('/register', (req, res) => {
     let { name, email, password } = req.body
     user.register({ name, email, password }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -75,7 +75,7 @@ router.post('/register', (req, res) => {
 router.post('/login', (req, res) => {
     let { nameOrEmail, password } = req.body
     user.login({ nameOrEmail, password }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -123,7 +123,7 @@ router.get('/jokes', (req, res) => {
     }
 
     user.jokes({ token, type, offset, size }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })

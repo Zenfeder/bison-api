@@ -13,7 +13,7 @@ router.use((req, res, next) => {
 // 获取热搜关键字
 router.get('/hot', (req, res) => {
     search.hotKeyword().then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -31,7 +31,7 @@ router.get('/', (req, res) => {
     }
 
     search.result({ keyword, offset, size }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })

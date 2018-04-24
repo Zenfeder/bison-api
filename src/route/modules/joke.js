@@ -23,7 +23,7 @@ router.route('/')
     let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
     joke.list({ offset, size }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -50,7 +50,7 @@ router.route('/:joke_id')
     let joke_id = req.params.joke_id
 
     joke.detail({ joke_id }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
@@ -90,7 +90,7 @@ router.route('/:joke_id/comment')
     let size = req.query.size===undefined?10:(Number.isInteger(req.query.size-0)&&req.query.size-0>0?req.query.size-0:10)
 
     jokeComment.list({ joke_id, offset, size }).then(data => {
-        res.status(200).send({ data })
+        res.status(200).send(data)
     }).catch(err => {
         res.status(err.code).send({ message: err.message })
     })
