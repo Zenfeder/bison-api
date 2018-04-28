@@ -81,7 +81,8 @@ class Joke extends Auth {
                     content,
                     user_id: user._id,
                     user_name: user.name,
-                    user_avator: user.avator
+                    user_avator: user.avator,
+                    created_at: Date.now()
                 })
 
                 joke.save((err, doc) => {

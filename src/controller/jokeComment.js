@@ -63,6 +63,7 @@ class JokeComment extends Auth {
                     user_id,
                     user_name: user.name,
                     user_avator: user.avator,
+                    created_at: Date.now()
                 })
 
                 jokeComment.save((err, doc) => {
