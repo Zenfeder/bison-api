@@ -57,6 +57,7 @@ class Search {
             JokeModel.find({
                 content: new RegExp(keywordList.join('|') + '+', 'i')
             })
+            .sort({ created_at: -1 })
             .skip(offset)
             .limit(size)
             .exec((err, docs) => {

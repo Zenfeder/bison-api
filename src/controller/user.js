@@ -181,6 +181,7 @@ class User extends Auth {
                         $in: user[USER_JOKES_TYPES[type]]
                     }
                 })
+                .sort({ created_at: -1 })
                 .skip(offset)
                 .limit(size)
                 .exec((err, jokes) => {

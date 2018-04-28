@@ -21,6 +21,7 @@ class JokeComment extends Auth {
                         $in: joke.comment_ids
                     }
                 })
+                .sort({ created_at: -1 })
                 .skip(offset)
                 .limit(size)
                 .exec((err, docs) => {

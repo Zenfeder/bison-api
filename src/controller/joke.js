@@ -10,6 +10,7 @@ class Joke extends Auth {
     list ({ offset, size }) {
         return new Promise((resolve, reject) => {
             JokeModel.find()
+            .sort({ created_at: -1 })
             .skip(offset)
             .limit(size)
             .exec((err, docs) => {
