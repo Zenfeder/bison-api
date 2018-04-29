@@ -5,7 +5,8 @@ class Auth {
     constructor() {}
 
     jwtSign(data) {
-        return jwt.sign(data, config.secret, { expiresIn: 86400 })
+        // expiresIn: 秒或具体描述时间的字符串. 如: 86400, "2 days", "10h", "7d"
+        return jwt.sign(data, config.secret, { expiresIn: 86400*7 })
     }
 
     jwtVerify(token) {
