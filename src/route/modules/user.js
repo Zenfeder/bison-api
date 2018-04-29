@@ -14,14 +14,6 @@ router.use((req, res, next) => {
 })
 
 router.route('/')
-.all((req, res, next) => {
-    if (!token) {
-        res.status(401).send({ message: '请登录' })
-        return
-    }
-    
-    next()
-})
 // 获取个人信息
 .get((req, res, next) => {
     user.profile({ token }).then(data => {

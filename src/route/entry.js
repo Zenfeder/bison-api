@@ -3,7 +3,7 @@ module.exports = function(app) {
     res.header('Access-Control-Allow-Origin', 'http://local.ha.kafer.top:8080')
     res.header('Access-Control-Allow-Methods', 'POST, GET, PUT, DELETE, OPTIONS')
     res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept, Authorization')
-
+    
     next()
   })
 
