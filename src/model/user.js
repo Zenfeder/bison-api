@@ -7,10 +7,7 @@ const userSchema = mongoose.Schema({
     verified: Boolean,
     password: String,
     gender: { type: Number, default: 0 }, // 0: 不详, 1: 男, 2: 女
-    avator: {
-        type: String, 
-        default: 'https://ha-kafer.oss-cn-beijing.aliyuncs.com/img/default-avatar.png' 
-    },
+    avator: String,
     write_joke_ids: { type: [String], _id : false },
     like_joke_ids: { type: [String], _id : false },
     dislike_joke_ids: { type: [String], _id : false },
