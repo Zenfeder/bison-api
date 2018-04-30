@@ -13,7 +13,7 @@ class Auth {
         return new Promise((resolve, reject) => {
             jwt.verify(token, config.secret, (err, decoded) => {
                 if (err) 
-                    return reject({ code: 401, message: '无效token' })
+                    return reject({ code: 401, message: '请登录' })
                 
                 resolve(decoded)
             })
