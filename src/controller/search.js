@@ -55,7 +55,7 @@ class Search {
 
         return new Promise((resolve, reject) => {
             JokeModel.find({
-                content: new RegExp(keywordList.join('|') + '+', 'i')
+                content: new RegExp(keywordList.join('|') + '+', 'g')
             })
             .sort({ created_at: -1 })
             .skip(offset)
