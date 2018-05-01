@@ -61,7 +61,7 @@ class Joke extends Auth {
                         comment_num: joke.comment_ids.length,
                         user_id: user._id,
                         user_name: user.name,
-                        user_avator: user.avator
+                        user_avator: user.avator || null
                     })
                 })
             })
