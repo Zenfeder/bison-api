@@ -16,7 +16,7 @@ class Search {
 
                 let keywords = []
                 docs.forEach(elem => {
-                    keywords.push({ keyword: elem.keyword })
+                    keywords.push(elem.keyword)
                 })
                 resolve(keywords)
             })
@@ -80,7 +80,7 @@ class Search {
                     })
                 })
 
-                resolve({ keywords: [keyword, ...keywordList], list: jokes })
+                resolve({ keywords: [...keywordList], list: jokes })
 
                 this.countSearchKeyword({ keyword })
             })
